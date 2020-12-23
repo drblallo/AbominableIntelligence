@@ -1,0 +1,4 @@
+add_subdirectory(tree)
+add_subdirectory(MachineLearning)
+add_subdirectory(Warhammer)
+add_subdirectory(Game)

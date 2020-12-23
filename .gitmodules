@@ -1,0 +1,6 @@
+[submodule "googletest"]
+	path = googletest
+	url = https://github.com/google/googletest.git
+[submodule "pytorch"]
+	path = pytorch
+	url = https://github.com/pytorch/pytorch.git
