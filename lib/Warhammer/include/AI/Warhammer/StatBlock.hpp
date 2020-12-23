@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <string>
 
 #include "AI/Warhammer/AbstractStatBlock.hpp"
 
@@ -21,6 +22,8 @@ namespace AI
 		SV = 8,
 		LAST = 9
 	};
+
+	void print(std::ostream& OS, ModelStat stat, std::uint8_t value) noexcept;
 
 	using StatBlock = AbstractStatBlock<ModelStat>;
 	using StatBlockBuilder = AbstractStatBlockBuilder<StatBlock>;

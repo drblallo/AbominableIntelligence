@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <ostream>
 
 #include "AI/Warhammer/AbstractStatBlock.hpp"
 
@@ -18,7 +19,7 @@ namespace AI
 		LAST = 5,
 	};
 
-	enum class WeaponType
+	enum WeaponType
 	{
 		RAPID_FIRE = 0,
 		HEAVY = 1,
@@ -27,6 +28,9 @@ namespace AI
 		PISTOL = 4,
 		GRANADE = 5
 	};
+
+	void print(std::ostream& OS, WeaponType stat) noexcept;
+	void print(std::ostream& OS, WeaponStat stat, std::uint8_t value) noexcept;
 
 	using WeaponStatBlock = AbstractStatBlock<WeaponStat>;
 	using WeaponBlockBuilder = AbstractStatBlockBuilder<WeaponStatBlock>;

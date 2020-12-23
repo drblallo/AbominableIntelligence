@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <ostream>
 
 namespace AI
 {
@@ -68,10 +69,27 @@ namespace AI
 			return true;
 		}
 
-		[[nodiscard]] iterator begin() { return stats.begin(); }
-		[[nodiscard]] iterator end() { return stats.end(); }
-		[[nodiscard]] const_iterator begin() const { return stats.begin(); }
-		[[nodiscard]] const_iterator end() const { return stats.end(); }
+		[[nodiscard]] iterator begin() noexcept { return stats.begin(); }
+		[[nodiscard]] iterator end() noexcept { return stats.end(); }
+		[[nodiscard]] const_iterator begin() const noexcept
+		{
+			return stats.begin();
+		}
+		[[nodiscard]] const_iterator end() const noexcept { return stats.end(); }
+
+		void print(std::ostream& OS, size_t indent = 0) const
+		{
+			for (size_t i = 0; i < indent; i++)
+				OS << "\t";
+
+			for (size_t i = 0; i < StatCount; i++)
+			{
+				print(OS, static_cast<StatEnumType>(i), stats[i]);
+				OS << " ";
+			}
+
+			OS << "\n";
+		}
 
 		private:
 		Container stats;

@@ -37,7 +37,10 @@ TEST(ModelTest, StatBlockConstxperComparable)
 
 TEST(ModelTest, WeaponStatBlockBuilder)
 {
-	constexpr auto weaponStats =
-			WeaponBlockBuilder().set<WeaponStat::S>(1).getBlock();
+	constexpr auto weaponStats = WeaponBlockBuilder()
+																	 .set<WeaponStat::S>(1)
+																	 .set<WeaponStat::TYPE>(ASSAULT)
+																	 .getBlock();
 	static_assert(weaponStats.get<WeaponStat::S>() == 1);
+	static_assert(weaponStats.get<WeaponStat::TYPE>() == ASSAULT);
 }
