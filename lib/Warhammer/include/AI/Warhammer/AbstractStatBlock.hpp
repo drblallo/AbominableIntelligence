@@ -48,6 +48,17 @@ namespace AI
 			return stats[static_cast<size_t>(stat)];
 		}
 
+		[[nodiscard]] constexpr const StatType& operator[](
+				StatEnumType stat) const noexcept
+		{
+			return stats[static_cast<size_t>(stat)];
+		}
+
+		[[nodiscard]] constexpr StatType& operator[](StatEnumType stat) noexcept
+		{
+			return stats[static_cast<size_t>(stat)];
+		}
+
 		constexpr int operator<=>(const AbstractStatBlock& other) const noexcept
 		{
 			for (size_t i = 0; i < StatCount; i++)
@@ -105,12 +116,11 @@ namespace AI
 		constexpr AbstractStatBlockBuilder() noexcept: blk(){};
 
 		template<StatEnumType stat>
-		[[nodiscard]] constexpr AbstractStatBlockBuilder set(
-				StatType newValue) const noexcept
+		[[nodiscard]] constexpr AbstractStatBlockBuilder& set(
+				StatType newValue) noexcept
 		{
-			auto toReturn = *this;
-			toReturn.blk.get(stat) = newValue;
-			return toReturn;
+			blk.get(stat) = newValue;
+			return *this;
 		}
 
 		[[nodiscard]] constexpr const StatBlockType& getBlock() const noexcept

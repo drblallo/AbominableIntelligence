@@ -44,3 +44,13 @@ TEST(ModelTest, WeaponStatBlockBuilder)
 	static_assert(weaponStats.get<WeaponStat::S>() == 1);
 	static_assert(weaponStats.get<WeaponStat::TYPE>() == ASSAULT);
 }
+
+TEST(ModelTest, WeaponStatOperatorQuad)
+{
+	constexpr auto weaponStats = WeaponBlockBuilder()
+																	 .set<WeaponStat::S>(1)
+																	 .set<WeaponStat::TYPE>(ASSAULT)
+																	 .getBlock();
+	static_assert(weaponStats[WeaponStat::S] == 1);
+	static_assert(weaponStats[WeaponStat::TYPE] == ASSAULT);
+}
