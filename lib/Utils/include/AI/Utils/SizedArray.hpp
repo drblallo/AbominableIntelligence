@@ -24,14 +24,22 @@ namespace AI
 		using const_reverse_iterator = typename Container::const_reverse_iterator;
 
 		template<typename... Content>
-		constexpr SizedArray(Content... args)
-				: values({ static_cast<T>(args)... }), siz(sizeof...(args))
+		constexpr SizedArray(T first, Content... args)
+				: values({ first, static_cast<T>(args)... }), siz(sizeof...(args) + 1)
 		{
 			static_assert(Size < std::numeric_limits<size_type>::max());
 			static_assert(std::is_trivial_v<T>);
 		}
 
-		constexpr SizedArray(): values({}), siz(0) {}
+		constexpr SizedArray(std::initializer_list<T> lst)
+				: values(), siz(lst.size())
+		{
+			auto it = lst.begin();
+			for (size_t i = 0; i < siz; i++)
+				values[i] = *(it++);
+		}
+
+		constexpr SizedArray(): values(), siz(0) {}
 
 		constexpr reference at(size_t pos) { return values.at(pos); }
 		constexpr const_reference at(size_t pos) const { return values.at(pos); }

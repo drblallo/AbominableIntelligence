@@ -1,2 +1,2 @@
-AIAddLibrary(Warhammer src/Warhammer.cpp src/StatBlock.cpp src/Weapon.cpp src/Model.cpp)
+AIAddLibrary(Warhammer src/Warhammer.cpp src/StatBlock.cpp src/Weapon.cpp src/Model.cpp src/Army.cpp)
 target_link_libraries(Warhammer PUBLIC AI::Game AI::Utils)

@@ -1,6 +1,7 @@
 #pragma once
 
 #include <AI/Warhammer/StatBlock.hpp>
+#include <cstdint>
 #include <string_view>
 
 #include "AI/Utils/SizedArray.hpp"
@@ -26,8 +27,11 @@ namespace AI
 		using iterator = weapon_container::iterator;
 		using const_iterator = weapon_container::const_iterator;
 
-		constexpr Model(StatBlock stats, weapon_container weapons = {}) noexcept
-				: stats(stats), weapons(weapons)
+		constexpr Model(
+				StatBlock stats,
+				weapon_container weapons = {},
+				std::uint8_t unitID = 0) noexcept
+				: unitID(unitID), stats(stats), weapons(weapons)
 		{
 		}
 
@@ -92,7 +96,11 @@ namespace AI
 		void print(std::ostream& OS, size_t indents = 0) const;
 		void dump() const;
 
+		[[nodiscard]] std::uint8_t getUnitID() const { return unitID; }
+		void setUnitID(std::uint8_t newUnitID) { unitID = newUnitID; }
+
 		private:
+		std::uint8_t unitID{ 0 };
 		StatBlock stats;
 		weapon_container weapons;
 	};
@@ -100,7 +108,7 @@ namespace AI
 	class ModelBuilder
 	{
 		public:
-		constexpr ModelBuilder(): model(){};
+		constexpr ModelBuilder() = default;
 		constexpr ModelBuilder(Model m): model(m){};
 
 		template<ModelStat stat>

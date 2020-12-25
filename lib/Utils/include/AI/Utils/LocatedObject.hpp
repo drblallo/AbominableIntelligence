@@ -77,10 +77,16 @@ namespace AI
 		}
 
 		constexpr value_type* operator->() { return &actual; }
-		constexpr const value_type* operator->() const { return &actual; }
+		[[nodiscard]] constexpr const value_type* operator->() const
+		{
+			return &actual;
+		}
 
 		constexpr value_type& operator*() { return actual; }
-		constexpr const value_type& operator*() const { return actual; }
+		[[nodiscard]] constexpr const value_type& operator*() const
+		{
+			return actual;
+		}
 
 		[[nodiscard]] constexpr const position_type& getPos() const
 		{
