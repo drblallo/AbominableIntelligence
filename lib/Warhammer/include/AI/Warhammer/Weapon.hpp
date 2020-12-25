@@ -31,16 +31,16 @@ namespace AI
 		GRANADE = 5
 	};
 
-	void print(std::ostream& OS, WeaponType stat) noexcept;
-	void print(std::ostream& OS, WeaponStat stat, std::uint8_t value) noexcept;
-
-	using WeaponStatBlock = AbstractStatBlock<WeaponStat>;
-	using WeaponBlockBuilder = AbstractStatBlockBuilder<WeaponStatBlock>;
-
 	enum class WeaponSpecialRule
 	{
 		NONE = 0
 	};
+
+	void print(std::ostream& OS, WeaponType stat) noexcept;
+	void print(std::ostream& OS, WeaponSpecialRule rule) noexcept;
+
+	using WeaponStatBlock = AbstractStatBlock<WeaponStat>;
+	using WeaponBlockBuilder = AbstractStatBlockBuilder<WeaponStatBlock>;
 
 	class Weapon
 	{
@@ -128,9 +128,45 @@ namespace AI
 			return false;
 		}
 
+		constexpr void addRule(WeaponSpecialRule rule)
+		{
+			specialRule.push_back(rule);
+		}
+
+		void print(std::ostream& OS, size_t indents = 0) const;
+
+		void dump() const;
+
 		private:
 		WeaponStatBlock stats;
 		Container specialRule;
+	};
+
+	class WeaponBuilder
+	{
+		public:
+		constexpr WeaponBuilder(): w() {}
+
+		template<WeaponStat stat>
+		constexpr WeaponBuilder& set(WeaponStatBlock::StatType val)
+		{
+			w.get<stat>() = val;
+			return *this;
+		}
+
+		constexpr WeaponBuilder& addRule() { return *this; }
+
+		template<typename First, typename... Rest>
+		constexpr WeaponBuilder& addRule(First w, Rest... r)
+		{
+			w.addRule(w);
+			return addRule(r...);
+		}
+
+		[[nodiscard]] constexpr Weapon getWeapon() const { return w; }
+
+		private:
+		Weapon w;
 	};
 
 };	// namespace AI

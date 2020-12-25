@@ -3,6 +3,7 @@
 #include <array>
 #include <cstddef>
 #include <cstdint>
+#include <initializer_list>
 #include <ostream>
 namespace AI
 {
@@ -13,16 +14,24 @@ namespace AI
 		using Container = std::array<Type, Dim>;
 		using iterator = typename Container::iterator;
 		using const_iterator = typename Container::const_iterator;
+		using value_type = Type;
 
 		template<typename... Args>
-		explicit constexpr Vector(Args... args)
-				: values({ static_cast<Type>(args)... })
+		explicit constexpr Vector(value_type first, Args... args)
+				: values({ first, static_cast<Type>(args)... })
 		{
 		}
 
 		constexpr Vector(): values() {}
 
 		explicit constexpr Vector(const std::array<Type, Dim> val): values(val) {}
+
+		explicit constexpr Vector(std::initializer_list<value_type> vals): values()
+		{
+			auto iter = vals.begin();
+			for (size_t i = 0; i < Dim; i++)
+				values[i] = *(iter++);
+		}
 
 		constexpr int operator<=>(const Vector& other) const
 		{

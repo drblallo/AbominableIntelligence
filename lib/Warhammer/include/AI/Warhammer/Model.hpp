@@ -1,11 +1,9 @@
 #pragma once
 
 #include <AI/Warhammer/StatBlock.hpp>
-#include <bits/stdint-uintn.h>
 #include <string_view>
 
 #include "AI/Utils/SizedArray.hpp"
-#include "AI/Utils/Vector.hpp"
 #include "AI/Warhammer/Weapon.hpp"
 
 namespace AI
@@ -22,22 +20,18 @@ namespace AI
 		constexpr static size_t max_weapons_count = 3;
 		using weapon_size_type = uint8_t;
 
-		using WeaponContainer =
+		using weapon_container =
 				SizedArray<Weapon, max_weapons_count, weapon_size_type>;
 
-		using iterator = WeaponContainer::iterator;
-		using const_iterator = WeaponContainer::const_iterator;
+		using iterator = weapon_container::iterator;
+		using const_iterator = weapon_container::const_iterator;
 
-		constexpr Model(StatBlock stats, U8Vector2 location = {}) noexcept
-				: stats(stats), location(location), weapons()
+		constexpr Model(StatBlock stats, weapon_container weapons = {}) noexcept
+				: stats(stats), weapons(weapons)
 		{
 		}
 
-		[[nodiscard]] constexpr const U8Vector2& getLocation() const
-		{
-			return location;
-		}
-		[[nodiscard]] constexpr U8Vector2& getLocation() { return location; }
+		constexpr Model() noexcept: stats(), weapons() {}
 
 		template<StatEnum stat>
 		[[nodiscard]] constexpr const StatType& get() const noexcept
@@ -93,9 +87,39 @@ namespace AI
 		[[nodiscard]] const_iterator begin() const { return weapons.begin(); }
 		[[nodiscard]] const_iterator end() const { return weapons.end(); }
 
+		constexpr void addWeapon(Weapon w) { weapons.push_back(w); }
+
+		void print(std::ostream& OS, size_t indents = 0) const;
+		void dump() const;
+
 		private:
 		StatBlock stats;
-		U8Vector2 location;
-		WeaponContainer weapons;
+		weapon_container weapons;
+	};
+
+	class ModelBuilder
+	{
+		public:
+		constexpr ModelBuilder(): model(){};
+		constexpr ModelBuilder(Model m): model(m){};
+
+		template<ModelStat stat>
+		constexpr ModelBuilder& set(StatBlock::StatType val)
+		{
+			model.get<stat>() = val;
+			return *this;
+		}
+
+		constexpr ModelBuilder& addWeapon(Weapon w)
+		{
+			model.addWeapon(w);
+			return *this;
+		}
+
+		[[nodiscard]] constexpr const Model& getModel() const { return model; }
+		[[nodiscard]] constexpr Model& getModel() { return model; }
+
+		private:
+		Model model;
 	};
 }	 // namespace AI

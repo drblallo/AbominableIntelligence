@@ -107,19 +107,19 @@ namespace AI
 			return true;
 		}
 
-		void push_back(const value_type& val)
+		constexpr void push_back(const value_type& val)
 		{
 			values.at(siz) = val;
 			siz++;
 		}
 
-		void push_back(value_type&& val)
+		constexpr void push_back(value_type&& val)
 		{
 			values.at(siz) = std::move(val);
 			siz++;
 		}
 
-		void clear() { siz = 0; }
+		constexpr void clear() { siz = 0; }
 
 		private:
 		std::array<T, Size> values;

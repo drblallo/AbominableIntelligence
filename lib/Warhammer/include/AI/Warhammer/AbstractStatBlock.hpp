@@ -88,6 +88,8 @@ namespace AI
 		}
 		[[nodiscard]] const_iterator end() const noexcept { return stats.end(); }
 
+		static void print(std::ostream& OS, StatEnumT t, StatT val);
+
 		void print(std::ostream& OS, size_t indent = 0) const
 		{
 			for (size_t i = 0; i < indent; i++)
@@ -98,8 +100,6 @@ namespace AI
 				print(OS, static_cast<StatEnumType>(i), stats[i]);
 				OS << " ";
 			}
-
-			OS << "\n";
 		}
 
 		private:

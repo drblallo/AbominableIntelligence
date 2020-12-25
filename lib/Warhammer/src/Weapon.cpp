@@ -1,9 +1,12 @@
 #include "AI/Warhammer/Weapon.hpp"
 
+#include <bits/stdint-uintn.h>
 #include <cassert>
 #include <cstdint>
 #include <iostream>
 #include <ostream>
+
+#include "AI/Warhammer/AbstractStatBlock.hpp"
 
 using namespace AI;
 using namespace std;
@@ -27,7 +30,9 @@ void AI::print(ostream& OS, WeaponType stat) noexcept
 	}
 }
 
-void AI::print(ostream& OS, WeaponStat stat, uint8_t value) noexcept
+template<>
+void AbstractStatBlock<WeaponStat, uint8_t>::print(
+		ostream& OS, WeaponStat stat, uint8_t value)
 {
 	switch (stat)
 	{
@@ -45,10 +50,33 @@ void AI::print(ostream& OS, WeaponStat stat, uint8_t value) noexcept
 			return;
 		case WeaponStat::TYPE:
 			OS << "TYPE:";
-			print(OS, static_cast<WeaponType>(value));
+			AI::print(OS, static_cast<WeaponType>(value));
 			return;
 		case WeaponStat::LAST:
 			OS << "ERROR";
 			return;
 	}
 }
+
+void AI::print(ostream& OS, WeaponSpecialRule rule) noexcept
+{
+	switch (rule)
+	{
+		case WeaponSpecialRule::NONE:
+			OS << "NONE";
+			return;
+	}
+}
+
+void Weapon::print(ostream& OS, size_t indents) const
+{
+	stats.print(OS, indents);
+	OS << " ";
+	for (WeaponSpecialRule rule : specialRule)
+	{
+		AI::print(OS, rule);
+		OS << " ";
+	}
+}
+
+void Weapon::dump() const { print(cout); }

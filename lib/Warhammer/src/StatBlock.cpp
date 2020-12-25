@@ -1,14 +1,19 @@
 #include "AI/Warhammer/StatBlock.hpp"
 
+#include <bits/stdint-uintn.h>
 #include <cassert>
 #include <cstdint>
 #include <iostream>
 #include <ostream>
 
+#include "AI/Warhammer/AbstractStatBlock.hpp"
+
 using namespace std;
 using namespace AI;
 
-void AI::print(ostream& OS, ModelStat stat, uint8_t value) noexcept
+template<>
+void AbstractStatBlock<ModelStat, uint8_t>::print(
+		ostream& OS, ModelStat stat, uint8_t value)
 {
 	switch (stat)
 	{
