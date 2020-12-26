@@ -39,6 +39,10 @@ namespace AI
 		requires Game<G>;
 		requires std::is_same_v<A, G::Action>;
 		{ action(game) };
+		{
+			action.canBeExecute(game)
+		}
+		->convertible_to<bool>;
 	};
 
 }	 // namespace AI
