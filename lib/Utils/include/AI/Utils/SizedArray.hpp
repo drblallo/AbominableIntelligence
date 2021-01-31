@@ -115,16 +115,11 @@ namespace AI
 			return true;
 		}
 
-		constexpr void push_back(const value_type& val)
-		{
-			values.at(siz) = val;
-			siz++;
-		}
+		constexpr void push_back(const value_type& val) { values.at(siz++) = val; }
 
 		constexpr void push_back(value_type&& val)
 		{
-			values.at(siz) = std::move(val);
-			siz++;
+			values.at(siz++) = std::move(val);
 		}
 
 		constexpr void clear() { siz = 0; }

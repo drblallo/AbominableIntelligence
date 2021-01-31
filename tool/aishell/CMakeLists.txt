@@ -1,0 +1,3 @@
+AIAddTool(
+	aishell	
+	AI::Game)	

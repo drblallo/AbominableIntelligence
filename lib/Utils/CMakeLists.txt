@@ -1,1 +1,1 @@
-AIAddLibrary(Utils src/Utils.cpp)
+AIAddLibrary(Utils src/Utils.cpp src/FunctionParser.cpp)
