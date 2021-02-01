@@ -17,6 +17,10 @@ static constexpr CommandList list = makeCommandList(showCaracters, "chars")
 																				.add(AI::showLocations, "loc")
 																				.add(AI::showMapElements, "map")
 																				.add(AI::showCaracter, "char")
+																				.add(AI::nextDay, "day")
+																				.add(AI::nextDay, "d")
+																				.add(AI::skipDays, "skip")
+																				.add(AI::nextDay, ":d")
 																				.add(AI::exit, "exit")
 																				.add(AI::exit, "q")
 																				.add(AI::exit, "quit")
@@ -26,6 +30,7 @@ struct Args
 {
 	bool showPrompt{ true };
 	string command{ "" };
+	string inputFile{ "" };
 };
 
 static Args parseArgs(int argc, char* argv[])
@@ -45,6 +50,12 @@ static Args parseArgs(int argc, char* argv[])
 			toReturn.showPrompt = false;
 			continue;
 		}
+		if (arg == "-i")
+		{
+			toReturn.inputFile = argv[++i];
+			toReturn.showPrompt = false;
+			continue;
+		}
 	}
 
 	return toReturn;
@@ -58,6 +69,14 @@ int main(int argc, char* argv[])
 	if (not args.command.empty())
 	{
 		istringstream s(args.command);
+		executeCommandStream(args.showPrompt, s, cout, list, map, cout);
+		return 0;
+	}
+
+	if (not args.inputFile.empty())
+	{
+		fstream s;
+		s.open(args.inputFile, ios_base::in);
 		executeCommandStream(args.showPrompt, s, cout, list, map, cout);
 		return 0;
 	}

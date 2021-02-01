@@ -245,11 +245,17 @@ namespace AI
 		std::vector<Character*> getInferiorsOf(const Character& c);
 		std::vector<const Character*> getInferiorsOf(const Character& c) const;
 
+		[[nodiscard]] size_t getCurrentDay() const { return currentDay; }
+		void setCurrentDay(size_t newCurrentDay) { currentDay = newCurrentDay; }
+		size_t nextDay() { return ++currentDay; }
+
 		private:
 		Graph<MapElement> mapGraph;
 		CharacterContainer characters;
 		CharacterLocationMatrix locationMatrix;
 		CharacterOwnershipMatrix ownershipMatrix;
 		Hierarchy<CharacterID> characterHierarchy;
+
+		size_t currentDay{ 0 };
 	};
 }	 // namespace AI

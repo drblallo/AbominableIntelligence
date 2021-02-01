@@ -195,5 +195,5 @@ TEST(UtilsTest, executeCommandStream)
 	executeCommandStream(iss, oss, list, out);
 	string res = oss.str();
 	EXPECT_EQ(out, 6);
-	EXPECT_EQ(res, ">\n>\n>");
+	EXPECT_EQ(res, ">>>");
 }

@@ -24,28 +24,28 @@ namespace AI
 
 	struct Pop
 	{
-		using size_type = std::uint32_t;
+		using size_type = double;
 
 		PopKind kind{ PopKind::human };
 		size_type quantity{ 0 };
 
-		constexpr static Pop human(std::uint32_t quantity)
+		constexpr static Pop human(size_type quantity)
 		{
 			return Pop{ PopKind::human, quantity };
 		}
-		constexpr static Pop guards(std::uint32_t quantity)
+		constexpr static Pop guards(size_type quantity)
 		{
 			return Pop{ PopKind::guards, quantity };
 		}
-		constexpr static Pop marine(std::uint32_t quantity)
+		constexpr static Pop marine(size_type quantity)
 		{
 			return Pop{ PopKind::spaceMarine, quantity };
 		}
-		constexpr static Pop genestealer(std::uint32_t quantity)
+		constexpr static Pop genestealer(size_type quantity)
 		{
 			return Pop{ PopKind::genestealer, quantity };
 		}
-		constexpr static Pop mechanicus(std::uint32_t quantity)
+		constexpr static Pop mechanicus(size_type quantity)
 		{
 			return Pop{ PopKind::mechanicum, quantity };
 		}
