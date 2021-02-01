@@ -70,11 +70,13 @@ void AI::showCaracter(const Map& map, std::ostream& OS, CharacterID id)
 
 static constexpr size_t largeTickInterval = 10;
 
+static void updateChar(Map&, Character&) {}
+
 static void updateDay(Map& map)
 {
 	map.nextDay();
-	// for (auto& character : map.getCharactersRange())
-	// character do something
+	for (auto& character : map.getCharactersRange())
+		updateChar(map, character);
 }
 
 static double growRate(PopKind kind)

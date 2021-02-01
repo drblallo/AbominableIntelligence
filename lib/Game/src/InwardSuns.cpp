@@ -45,25 +45,28 @@ Map AI::inwardSuns()
 	using C = CharacterKind;
 	Map map;
 	const auto& location = map.getMapElement(map.addMapElement(kaneis()));
-	map.emplaceOwner<C::GangLord>(location[0], "Ollander");
-	map.emplace<C::GangLord>(location[0], "Red Stick");
+	map.emplaceOwner<C::GangLord>(
+			location[0], "Ollander", Statblock{ 35, 35, 30, 40, 30, 30, 35 });
+	map.emplace<C::GangLord>(
+			location[0], "Red Stick", Statblock{ 30, 30, 35, 25, 40, 35, 30 });
 
-	CharacterID Vincent =
-			map.emplaceOwner<C::PlanetaryGovernor>(location[1], "Vincent Roh VII");
-	CharacterID Alexander =
-			map.emplace<C::LocalNobility>(location[1], "Alexander Roh");
+	CharacterID Vincent = map.emplaceOwner<C::PlanetaryGovernor>(
+			location[1], "Vincent Roh VII", Statblock{ 30, 25, 25, 30, 30, 40, 35 });
+	CharacterID Alexander = map.emplace<C::LocalNobility>(
+			location[1], "Alexander Roh", Statblock{ 30, 30, 30, 30, 30, 30, 30 });
 	map.setSuperrior(Alexander, Vincent);
 
-	CharacterID Sebastian =
-			map.emplaceOwner<C::PDFGeneral>(location[2], "Sebastian Nimoy");
-	CharacterID Federick =
-			map.emplace<C::PDFColonnell>(location[2], "Federick Asseir");
+	CharacterID Sebastian = map.emplaceOwner<C::PDFGeneral>(
+			location[2], "Sebastian Nimoy", Statblock{ 35, 35, 30, 40, 30, 40, 30 });
+	CharacterID Federick = map.emplace<C::PDFColonnell>(
+			location[2], "Federick Asseir", Statblock{ 35, 35, 30, 30, 40, 35, 30 });
 	map.setSuperrior(Federick, Sebastian);
 	map.setSuperrior(Sebastian, Vincent);
 
-	CharacterID Henne = map.emplaceOwner<C::Bishop>(location[3], "Henne Vogel");
-	CharacterID Lolerey =
-			map.emplace<C::SisterOfBattleBadess>(location[3], "Lolerey Pathos");
+	CharacterID Henne = map.emplaceOwner<C::Bishop>(
+			location[3], "Henne Vogel", Statblock{ 25, 35, 25, 30, 30, 35, 40 });
+	CharacterID Lolerey = map.emplace<C::SisterOfBattleBadess>(
+			location[3], "Lolerey Pathos", Statblock{ 35, 30, 35, 40, 25, 30 });
 	map.setSuperrior(Lolerey, Henne);
 
 	return map;

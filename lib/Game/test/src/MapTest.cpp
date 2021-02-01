@@ -23,8 +23,11 @@ TEST(mapTest, withCharacters)
 	LocationKey loc{ 0, 0 };
 	EXPECT_TRUE(map[loc].getKey().isValid());
 	EXPECT_EQ(map[loc].getKey(), loc);
-	CharacterID characterID =
-			map.emplaceCharacter(loc, "Feu Foy", CharacterKind::FeudalLord);
+	CharacterID characterID = map.emplaceCharacter(
+			loc,
+			"Feu Foy",
+			Statblock{ 1, 2, 3, 4, 5, 6, 7 },
+			CharacterKind::FeudalLord);
 	auto& character = map.getCharacter(characterID);
 	EXPECT_EQ(character.getName(), "Feu Foy");
 	EXPECT_TRUE(character.isA(CharacterKind::FeudalLord));
