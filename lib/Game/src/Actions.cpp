@@ -11,7 +11,19 @@ using namespace std;
 void AI::getStat(
 		const Map& map, std::ostream& OS, CharacterID id, int statNumber)
 {
-	OS << map.getCharacter(id).getStats()[statNumber] << "\n";
+	OS << id << ", " << map.getCharacter(id).getStats()[statNumber] << "\n";
+}
+
+void AI::getPop(
+		const Map& map,
+		std::ostream& OS,
+		size_t element,
+		size_t location,
+		int popIndex)
+{
+	OS << element << "-" << location << "-" << popIndex << ", "
+		 << map.getLocation(element, location).getPopulation()[popIndex].quantity
+		 << "\n";
 }
 
 void AI::showCaracters(const Map& map, std::ostream& OS)

@@ -15,6 +15,7 @@ using namespace std;
 
 static constexpr CommandList list = makeCommandList(showCaracters, "chars")
 																				.add(AI::showLocations, "loc")
+																				.add(AI::getPop, "pop")
 																				.add(AI::showMapElements, "map")
 																				.add(AI::showCaracter, "char")
 																				.add(AI::nextDay, "day")

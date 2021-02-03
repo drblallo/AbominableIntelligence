@@ -16,4 +16,10 @@ namespace AI
 	void exit(const Map& map, std::ostream& OS);
 	void nextDay(Map& map, std::ostream& OS);
 	void skipDays(Map& map, std::ostream& OS, int ticks);
+	void getPop(
+			const Map& map,
+			std::ostream& OS,
+			size_t element,
+			size_t location,
+			int popIndex);
 }	 // namespace AI

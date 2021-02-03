@@ -16,6 +16,7 @@ namespace AI
 			const CommandList& lst,
 			FixedArgs&... args)
 	{
+		out.precision(10);
 		if (showPrompt)
 			out << ">";
 		CommandPrompt prompt(lst, args...);
