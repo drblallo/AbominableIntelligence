@@ -40,33 +40,41 @@ MapElement AI::kaneis()
 				cathedral("Saint Neminem Cathedral") });
 }
 
-Map AI::inwardSuns()
+Map AI::inwardSuns(std::seed_seq& seed)
 {
 	using C = CharacterKind;
-	Map map;
+	Map map(seed);
 	const auto& location = map.getMapElement(map.addMapElement(kaneis()));
 	map.emplaceOwner<C::GangLord>(
-			location[0], "Ollander", Statblock{ 35, 35, 30, 40, 30, 30, 35 });
+			location[0], "Ollander", Statblock{ 35, 35, 30, 40, 30, 30, 35, 15 });
 	map.emplace<C::GangLord>(
-			location[0], "Red Stick", Statblock{ 30, 30, 35, 25, 40, 35, 30 });
+			location[0], "Red Stick", Statblock{ 30, 30, 35, 25, 40, 35, 30, 5 });
 
 	CharacterID Vincent = map.emplaceOwner<C::PlanetaryGovernor>(
-			location[1], "Vincent Roh VII", Statblock{ 30, 25, 25, 30, 30, 40, 35 });
+			location[1],
+			"Vincent Roh VII",
+			Statblock{ 30, 25, 25, 30, 30, 40, 35, 40 });
 	CharacterID Alexander = map.emplace<C::LocalNobility>(
-			location[1], "Alexander Roh", Statblock{ 30, 30, 30, 30, 30, 30, 30 });
+			location[1],
+			"Alexander Roh",
+			Statblock{ 30, 30, 30, 30, 30, 30, 30, 20 });
 	map.setSuperrior(Alexander, Vincent);
 
 	CharacterID Sebastian = map.emplaceOwner<C::PDFGeneral>(
-			location[2], "Sebastian Nimoy", Statblock{ 35, 35, 30, 40, 30, 40, 30 });
+			location[2],
+			"Sebastian Nimoy",
+			Statblock{ 35, 35, 30, 40, 30, 40, 30, 20 });
 	CharacterID Federick = map.emplace<C::PDFColonnell>(
-			location[2], "Federick Asseir", Statblock{ 35, 35, 30, 30, 40, 35, 30 });
+			location[2],
+			"Federick Asseir",
+			Statblock{ 35, 35, 30, 30, 40, 35, 30, 15 });
 	map.setSuperrior(Federick, Sebastian);
 	map.setSuperrior(Sebastian, Vincent);
 
 	CharacterID Henne = map.emplaceOwner<C::Bishop>(
-			location[3], "Henne Vogel", Statblock{ 25, 35, 25, 30, 30, 35, 40 });
+			location[3], "Henne Vogel", Statblock{ 25, 35, 25, 30, 30, 35, 40, 30 });
 	CharacterID Lolerey = map.emplace<C::SisterOfBattleBadess>(
-			location[3], "Lolerey Pathos", Statblock{ 35, 30, 35, 40, 25, 30 });
+			location[3], "Lolerey Pathos", Statblock{ 35, 30, 35, 40, 25, 30, 20 });
 	map.setSuperrior(Lolerey, Henne);
 
 	return map;

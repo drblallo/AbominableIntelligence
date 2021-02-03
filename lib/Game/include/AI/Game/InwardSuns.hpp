@@ -35,6 +35,6 @@ namespace AI
 	// TODO
 	MapElement ulisse();
 
-	Map inwardSuns();
+	Map inwardSuns(std::seed_seq& seed);
 
 };	// namespace AI

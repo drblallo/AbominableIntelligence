@@ -19,7 +19,8 @@ TEST(mapTest, defaultMap)
 
 TEST(mapTest, withCharacters)
 {
-	Map map = inwardSuns();
+	seed_seq seed({ 0 });
+	Map map = inwardSuns(seed);
 	LocationKey loc{ 0, 0 };
 	EXPECT_TRUE(map[loc].getKey().isValid());
 	EXPECT_EQ(map[loc].getKey(), loc);

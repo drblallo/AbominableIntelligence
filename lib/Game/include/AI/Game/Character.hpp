@@ -6,18 +6,11 @@
 #include <string_view>
 #include <vector>
 
+#include "AI/Game/Activity.hpp"
 #include "AI/Game/MapElement.hpp"
 
 namespace AI
 {
-	enum class Activity
-	{
-		None,
-		ExtendInfluence,
-		ReduceInfluence,
-		BidForOwership
-	};
-
 	enum class CharacterKind
 	{
 		FeudalLord,
@@ -38,6 +31,34 @@ namespace AI
 		GenestealerPatriarch
 	};
 
+	constexpr inline float maxRequisition(CharacterKind kind)
+	{
+		switch (kind)
+		{
+			case CharacterKind::FeudalLord:
+			case CharacterKind::GangLord:
+				return 30;
+			case CharacterKind::PDFColonnell:
+			case CharacterKind::OrkWarboss:
+				return 50;
+			case CharacterKind::Bishop:
+			case CharacterKind::PlanetaryGovernor:
+			case CharacterKind::LocalNobility:
+			case CharacterKind::EldarAutharc:
+			case CharacterKind::EldarPirate:
+			case CharacterKind::SisterOfBattleBadess:
+			case CharacterKind::PDFGeneral:
+			case CharacterKind::GenestealerPatriarch:
+				return 60;
+			case CharacterKind::SpaceMarineCaptain:
+			case CharacterKind::ImperialGuardCommander:
+				return 80;
+			case CharacterKind::Inquisitor:
+			case CharacterKind::SpaceMarineChapterMaster:
+				return 100;
+		}
+	}
+
 	enum Stat
 	{
 		strenght,
@@ -46,14 +67,15 @@ namespace AI
 		perception,
 		intelligence,
 		willpower,
-		fellowship
+		fellowship,
+		requisition
 	};
 
 	class Statblock
 	{
 		public:
-		static constexpr size_t StatCount = 6;
-		using stat_type = std::uint16_t;
+		static constexpr size_t StatCount = requisition + 1;
+		using stat_type = float;
 		using Container = std::array<stat_type, StatCount>;
 		using iterator = Container::iterator;
 		using const_iterator = Container::const_iterator;
@@ -65,15 +87,19 @@ namespace AI
 		}
 
 		template<Stat s>
-		stat_type get() const
+		[[nodiscard]] stat_type get() const
 		{
 			return stats[s];
 		}
 
 		template<Stat s>
-		stat_type set(stat_type newValue)
+		void set(stat_type newValue)
 		{
 			stats[s] = newValue;
+		}
+		[[nodiscard]] stat_type operator[](size_t index) const
+		{
+			return stats[index];
 		}
 
 		[[nodiscard]] iterator begin() { return stats.begin(); }
@@ -83,6 +109,9 @@ namespace AI
 		[[nodiscard]] const_iterator begin() const { return stats.begin(); }
 
 		[[nodiscard]] const_iterator end() const { return stats.end(); }
+
+		void print(std::ostream& OS, size_t indents = 0) const;
+		void dump() const;
 
 		private:
 		Container stats{};
@@ -126,10 +155,16 @@ namespace AI
 			stats.set<s>(newValue);
 		}
 
+		[[nodiscard]] Statblock::stat_type operator[](size_t index) const
+		{
+			return stats[index];
+		}
+
 		void print(std::ostream& OS, size_t indents = 0) const;
 		void dump() const;
 
 		[[nodiscard]] Activity getActivity() const { return activity; }
+		void setActivity(Activity newActivity) { activity = newActivity; }
 
 		private:
 		const CharacterID id;

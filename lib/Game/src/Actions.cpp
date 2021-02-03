@@ -1,11 +1,18 @@
 #include "AI/Game/Actions.hpp"
 
+#include "AI/Game/Activity.hpp"
 #include "AI/Game/Character.hpp"
 #include "AI/Game/Population.hpp"
 #include "AI/Utils/Indent.hpp"
 
 using namespace AI;
 using namespace std;
+
+void AI::getStat(
+		const Map& map, std::ostream& OS, CharacterID id, int statNumber)
+{
+	OS << map.getCharacter(id).getStats()[statNumber] << "\n";
+}
 
 void AI::showCaracters(const Map& map, std::ostream& OS)
 {
@@ -70,14 +77,39 @@ void AI::showCaracter(const Map& map, std::ostream& OS, CharacterID id)
 
 static constexpr size_t largeTickInterval = 10;
 
-static void updateChar(Map&, Character&) {}
-
-static void updateDay(Map& map)
+static void updateActivity(Map& map, Character& character)
 {
-	map.nextDay();
-	for (auto& character : map.getCharactersRange())
-		updateChar(map, character);
+	switch (character.getActivity())
+	{
+		case Activity::None:
+			return;
+		case Activity::BidForOwership:
+			resolveActivity<Activity::BidForOwership>(map, character);
+			return;
+		case Activity::ExtendInfluence:
+			resolveActivity<Activity::ExtendInfluence>(map, character);
+			return;
+		case Activity::ReduceInfluence:
+			resolveActivity<Activity::ReduceInfluence>(map, character);
+			return;
+	}
 }
+
+static void updateChar(Map& map, Character& character)
+{
+	if (character.get<requisition>() >
+					maxRequisition(character.getKind()) - 0.1 or
+			character.get<fellowship>() >= character.get<intelligence>())
+		character.setActivity(Activity::ReduceInfluence);
+	else if (auto* owner = map.getOwnerOf(map.getLocationOf(character));
+					 owner != nullptr and
+					 owner->get<requisition>() < character.get<requisition>() - 5)
+		character.setActivity(Activity::BidForOwership);
+	else
+		character.setActivity(Activity::ExtendInfluence);
+}
+
+static void updateDay(Map& map) { map.nextDay(); }
 
 static double growRate(PopKind kind)
 {
@@ -114,6 +146,12 @@ static void updateMonth(Map& map)
 	for (auto& mapElement : map)
 		for (auto& location : mapElement.first)
 			updateLocation(map, location);
+
+	for (auto& character : map.getCharactersRange())
+		updateChar(map, character);
+
+	for (auto& character : map.getCharactersRange())
+		updateActivity(map, character);
 }
 
 void AI::nextDay(Map& map, std::ostream&)
@@ -127,6 +165,4 @@ void AI::skipDays(Map& map, std::ostream& OS, int ticks)
 {
 	for (int i = 0; i < ticks; i++)
 		nextDay(map, OS);
-
-	std::cout << "Day: " << map.getCurrentDay() << "\n";
 }

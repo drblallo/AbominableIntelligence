@@ -12,6 +12,7 @@ release
 .ycm_extra_conf.py
 .clangd
 .idea
+.cache
 
 # User-specific stuff
 .idea/**/workspace.xml

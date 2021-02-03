@@ -13,7 +13,7 @@ namespace AI
 		constexpr static size_t faces_count = FacesCount;
 		using value_type = type;
 
-		explicit Dice(std::seed_seq seed)
+		explicit Dice(std::seed_seq& seed)
 				: generator(seed), distribution(1, FacesCount)
 		{
 			static_assert(std::numeric_limits<type>::max() > FacesCount);
@@ -26,17 +26,17 @@ namespace AI
 			generator.seed(dev());
 		}
 
-		value_type roll() const { return distribution(generator); }
+		value_type roll() { return distribution(generator); }
 
 		template<typename Iterator>
-		void fill(Iterator begin, Iterator end) const
+		void fill(Iterator begin, Iterator end)
 		{
 			for (Iterator it = begin; it != end; it++)
 				*it = roll();
 		}
 
 		template<typename Container>
-		void fill(Container c) const
+		void fill(Container c)
 		{
 			for (auto& val : c)
 				val = roll();

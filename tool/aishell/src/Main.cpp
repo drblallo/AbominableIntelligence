@@ -18,6 +18,7 @@ static constexpr CommandList list = makeCommandList(showCaracters, "chars")
 																				.add(AI::showMapElements, "map")
 																				.add(AI::showCaracter, "char")
 																				.add(AI::nextDay, "day")
+																				.add(AI::getStat, "stat")
 																				.add(AI::nextDay, "d")
 																				.add(AI::skipDays, "skip")
 																				.add(AI::nextDay, ":d")
@@ -64,7 +65,8 @@ static Args parseArgs(int argc, char* argv[])
 int main(int argc, char* argv[])
 {
 	Args args(parseArgs(argc, argv));
-	Map map = inwardSuns();
+	seed_seq seed({ 0 });
+	Map map = inwardSuns(seed);
 
 	if (not args.command.empty())
 	{

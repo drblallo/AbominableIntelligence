@@ -1,8 +1,10 @@
 #pragma once
 
 #include <cstddef>
+#include <cstdint>
 #include <functional>
 #include <limits>
+#include <random>
 #include <utility>
 #include <vector>
 
@@ -11,6 +13,7 @@
 #include "AI/Game/Hierarchy.hpp"
 #include "AI/Game/Location.hpp"
 #include "AI/Game/MapElement.hpp"
+#include "AI/Utils/Dice.hpp"
 #include "AI/Utils/Graph.hpp"
 #include "AI/Utils/Range.hpp"
 #include "AI/Utils/Vector.hpp"
@@ -31,6 +34,9 @@ namespace AI
 		const_iterator begin() const { return mapGraph.begin(); }
 		iterator end() { return mapGraph.end(); }
 		const_iterator end() const { return mapGraph.end(); }
+
+		explicit Map(std::seed_seq& seed): dice(seed) {}
+		Map() = default;
 
 		const Location& operator[](LocationKey key) const
 		{
@@ -159,6 +165,16 @@ namespace AI
 
 		std::vector<const Character*> charactersOfLocation(LocationKey key) const;
 
+		std::vector<Character*> charactersOfLocation(Location key)
+		{
+			return charactersOfLocation(key.getKey());
+		}
+
+		std::vector<const Character*> charactersOfLocation(Location key) const
+		{
+			return charactersOfLocation(key.getKey());
+		}
+
 		size_t charactersSize() const { return characters.size(); }
 		const_character_iterator charbegin() const { return characters.begin(); }
 		const_character_iterator charend() const { return characters.end(); }
@@ -197,6 +213,34 @@ namespace AI
 		LocationKey getOwnershipOf(CharacterID id) const
 		{
 			return ownershipMatrix[id];
+		}
+
+		const Character* getOwnerOf(const Location& loc) const
+		{
+			if (auto maybeChar = ownershipMatrix[loc.getKey()]; maybeChar.has_value())
+				return &getCharacter(*maybeChar);
+			return nullptr;
+		}
+
+		Character* getOwnerOf(const Location& loc)
+		{
+			if (auto maybeChar = ownershipMatrix[loc.getKey()]; maybeChar.has_value())
+				return &getCharacter(*maybeChar);
+			return nullptr;
+		}
+
+		const Character* getOwnerOf(LocationKey loc) const
+		{
+			if (auto maybeChar = ownershipMatrix[loc]; maybeChar.has_value())
+				return &getCharacter(*maybeChar);
+			return nullptr;
+		}
+
+		Character* getOwnerOf(LocationKey loc)
+		{
+			if (auto maybeChar = ownershipMatrix[loc]; maybeChar.has_value())
+				return &getCharacter(*maybeChar);
+			return nullptr;
 		}
 
 		void setSuperrior(CharacterID inferior, CharacterID superior)
@@ -249,13 +293,16 @@ namespace AI
 		void setCurrentDay(size_t newCurrentDay) { currentDay = newCurrentDay; }
 		size_t nextDay() { return ++currentDay; }
 
+		Dice<std::int8_t, 100>& getDice() { return dice; }
+
 		private:
 		Graph<MapElement> mapGraph;
 		CharacterContainer characters;
 		CharacterLocationMatrix locationMatrix;
 		CharacterOwnershipMatrix ownershipMatrix;
 		Hierarchy<CharacterID> characterHierarchy;
+		Dice<std::int8_t, 100> dice;
 
 		size_t currentDay{ 0 };
-	};
+	};	// namespace AI
 }	 // namespace AI
