@@ -45,6 +45,8 @@ string_view AI::kindToName(CharacterKind k)
 			return "Eldar Pirate";
 		case CharacterKind::GenestealerPatriarch:
 			return "Genestealer Patriarc";
+		case CharacterKind::RoguePsyker:
+			return "Rogue Psyker";
 	}
 	assert(false and "Unrechable");
 	return "Unreachable";

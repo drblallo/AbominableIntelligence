@@ -26,24 +26,24 @@ namespace AI
 			generator.seed(dev());
 		}
 
-		value_type roll() { return distribution(generator); }
+		value_type roll() const { return distribution(generator); }
 
 		template<typename Iterator>
-		void fill(Iterator begin, Iterator end)
+		void fill(Iterator begin, Iterator end) const
 		{
 			for (Iterator it = begin; it != end; it++)
 				*it = roll();
 		}
 
 		template<typename Container>
-		void fill(Container c)
+		void fill(Container c) const
 		{
 			for (auto& val : c)
 				val = roll();
 		}
 
 		private:
-		std::mt19937 generator;
+		mutable std::mt19937 generator;
 		std::uniform_int_distribution<type> distribution;
 	};
 }	 // namespace AI

@@ -25,6 +25,7 @@ namespace AI
 		Bishop,
 		SisterOfBattleBadess,
 		GangLord,
+		RoguePsyker,
 		OrkWarboss,
 		EldarAutharc,
 		EldarPirate,
@@ -37,6 +38,7 @@ namespace AI
 		{
 			case CharacterKind::FeudalLord:
 			case CharacterKind::GangLord:
+			case CharacterKind::RoguePsyker:
 				return 30;
 			case CharacterKind::PDFColonnell:
 			case CharacterKind::OrkWarboss:

@@ -13,6 +13,7 @@
 #include "AI/Game/Hierarchy.hpp"
 #include "AI/Game/Location.hpp"
 #include "AI/Game/MapElement.hpp"
+#include "AI/Game/Vox.hpp"
 #include "AI/Utils/Dice.hpp"
 #include "AI/Utils/Graph.hpp"
 #include "AI/Utils/Range.hpp"
@@ -294,6 +295,9 @@ namespace AI
 		size_t nextDay() { return ++currentDay; }
 
 		Dice<std::int8_t, 100>& getDice() { return dice; }
+		const Dice<std::int8_t, 100>& getDice() const { return dice; }
+
+		Vox& getVox() { return vox; }
 
 		private:
 		Graph<MapElement> mapGraph;
@@ -302,6 +306,7 @@ namespace AI
 		CharacterOwnershipMatrix ownershipMatrix;
 		Hierarchy<CharacterID> characterHierarchy;
 		Dice<std::int8_t, 100> dice;
+		Vox vox;
 
 		size_t currentDay{ 0 };
 	};	// namespace AI
