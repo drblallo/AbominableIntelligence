@@ -32,8 +32,6 @@ set(CMAKE_DEBUG_POSTFIX "-d")
 set_tests_properties(${noArgsTests}   PROPERTIES TIMEOUT 10)
 set(CMAKE_INSTALL_RPATH "$ORIGIN/../lib")
 
-find_package(Torch REQUIRED)
-
 ##############################
 ###       Subfolders       ###
 ##############################

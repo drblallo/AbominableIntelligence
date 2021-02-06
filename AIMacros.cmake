@@ -47,6 +47,11 @@ target_compile_features(${target} PUBLIC cxx_std_20)
 AIInstall(${target})
 
 add_subdirectory(test)
+
+if (DEFINED AI_FUZZ)
+	target_compile_options(${target} PUBLIC -g -O1 -fsanitize=fuzzer)
+	target_link_libraries(${target} PUBLIC -fsanitize=fuzzer)
+endif()
 	
 
 endmacro(AIAddLibrary)
@@ -56,6 +61,7 @@ endmacro(AIAddLibrary)
 ### AIAddTestMacro   ###
 ##############################
 macro(AIAddTest target)
+	if (NOT DEFINED AI_FUZZ)
 	include(GoogleTest)
 
 	add_executable(${target}Test ${ARGN})
@@ -68,6 +74,7 @@ macro(AIAddTest target)
 					TEST_SUFFIX .noArgs
 					TEST_LIST   noArgsTests
 	)
+	endif()
 
 endmacro(AIAddTest)
 
@@ -76,6 +83,7 @@ endmacro(AIAddTest)
 ##############################
 macro(AIAddTool target)
 
+if (NOT CMAKE_CXX_COMPILER_ID STREQUAL "Clang" OR NOT DEFINED AI_FUZZ)
 	add_executable(${target} src/Main.cpp)
 	add_executable(AI::${target} ALIAS ${target})
 
@@ -86,6 +94,30 @@ macro(AIAddTool target)
 	INSTALL(TARGETS ${target} RUNTIME DESTINATION bin)
 
 	add_subdirectory(test)
+endif()
 	
 
 endMacro(AIAddTool)
+
+##############################
+###   AIAddFuzzerMacro     ###
+##############################
+macro(AIAddFuzzer target)
+
+if (CMAKE_CXX_COMPILER_ID STREQUAL "Clang" AND DEFINED AI_FUZZ)
+	add_executable(${target} src/Main.cpp)
+	add_executable(AI::${target} ALIAS ${target})
+
+	target_link_libraries(${target} PUBLIC ${ARGN})
+	target_compile_features(${target} PUBLIC cxx_std_20)
+	target_compile_options(${target} PRIVATE -g -O1 -fsanitize=fuzzer)
+	target_link_libraries(${target} PRIVATE -fsanitize=fuzzer)
+
+	include(GNUInstallDirs)
+	INSTALL(TARGETS ${target} RUNTIME DESTINATION bin)
+
+	add_subdirectory(test)
+endif()
+	
+
+endMacro(AIAddFuzzer)

@@ -9,8 +9,7 @@ using namespace AI;
 static constexpr Statblock::stat_type intelligenceToInfluenceDivisor = 20;
 
 template<>
-void AI::resolveActivity<Activity::ExtendInfluence>(
-		Map& map, Character& character)
+void AI::resolveActivity<Activity::ExtendInfluence>(Map&, Character& character)
 {
 	float increase =
 			character.get<intelligence>() / intelligenceToInfluenceDivisor;
@@ -44,7 +43,7 @@ void AI::resolveActivity<Activity::BidForOwership>(
 	if (map.getOwnershipOf(character.getID()).isValid())
 		return;
 
-	auto diceRes = map.getDice().roll();
+	auto diceRes = map.roll();
 	auto* comparedTo = map.getOwnerOf(map.getLocationOf(character));
 	if (not comparedTo)
 		return;

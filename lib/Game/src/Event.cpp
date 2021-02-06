@@ -7,29 +7,36 @@ using namespace AI;
 
 #define CEVENT(name, check, action)                                            \
 	CharacterEvent name(                                                         \
-			"name", [](const Map& map, const Character& character) check, [          \
-			](Map & map, Character & character) action);
+			"name",                                                                  \
+			[]([[maybe_unused]] const Map& map,                                      \
+				 [[maybe_unused]] const Character& character) check,                   \
+			[]([[maybe_unused]] Map & map, [[maybe_unused]] Character & character)   \
+					action);
 
 #define LEVENT(name, check, action)                                            \
 	LocationEvent name(                                                          \
-			"name", [](const Map& map, const Location& location) check, [            \
-			](Map & map, Location & location) action);
+			"name",                                                                  \
+			[]([[maybe_unused]] const Map& map,                                      \
+				 [[maybe_unused]] const Location& location) check,                     \
+			[]([[maybe_unused]] Map & map, [[maybe_unused]] Location & location)     \
+					action);
 
 #define GEVENT(name, check, action)                                            \
-	GlobalEvent name("name", [](const Map& map) check, [](Map & map) action);
+	GlobalEvent name("name", []([[maybe_unused]] const Map& map) check, [        \
+	]([[maybe_unused]] Map & map) action);
 
-static GEVENT(
+GEVENT(
 		Sanguinala,
-		{ return map.getCurrentDay() % 1000 == 982 and map.getDice().roll() < 3; },
+		{ return map.getCurrentDay() % 1000 == 982 and map.roll() < 3; },
 		{
 			map.getVox().putMessage(
 					"Serfs and lieges alike unite in a pray of deliverance, as the day "
 					"of Sanguinius binds mankind together.");
 		});
 
-static LEVENT(
+LEVENT(
 		MindUnbound,
-		{ return map.getDice().roll() < 2 and map.getDice().roll() < 2; },
+		{ return map.roll() < 2 and map.roll() < 2; },
 		{
 			map.emplace<CharacterKind::RoguePsyker>(
 					location,

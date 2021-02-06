@@ -31,6 +31,8 @@ namespace AI
 		using iterator = Graph<MapElement>::iterator;
 		using const_iterator = Graph<MapElement>::const_iterator;
 
+		using DiceType = Dice<std::uint8_t, 100>;
+
 		iterator begin() { return mapGraph.begin(); }
 		const_iterator begin() const { return mapGraph.begin(); }
 		iterator end() { return mapGraph.end(); }
@@ -294,8 +296,7 @@ namespace AI
 		void setCurrentDay(size_t newCurrentDay) { currentDay = newCurrentDay; }
 		size_t nextDay() { return ++currentDay; }
 
-		Dice<std::int8_t, 100>& getDice() { return dice; }
-		const Dice<std::int8_t, 100>& getDice() const { return dice; }
+		DiceType::value_type roll() const { return dice.roll(); }
 
 		Vox& getVox() { return vox; }
 
@@ -305,7 +306,7 @@ namespace AI
 		CharacterLocationMatrix locationMatrix;
 		CharacterOwnershipMatrix ownershipMatrix;
 		Hierarchy<CharacterID> characterHierarchy;
-		Dice<std::int8_t, 100> dice;
+		mutable DiceType dice;
 		Vox vox;
 
 		size_t currentDay{ 0 };

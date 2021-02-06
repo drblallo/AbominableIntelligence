@@ -7,6 +7,7 @@
 compile_commands.json
 tags
 build
+buildfuzz
 release
 .vimrc
 .ycm_extra_conf.py
