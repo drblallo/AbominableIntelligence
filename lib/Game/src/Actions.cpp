@@ -123,34 +123,48 @@ static void updateChar(Map& map, Character& character)
 
 static void updateDay(Map& map) { map.nextDay(); }
 
-static double growRate(PopKind kind)
+static double growRate(const Map&, const Location& location, PopKind pop)
 {
-	switch (kind)
+	auto quantity = location.getPopulation(pop);
+	switch (pop)
 	{
 		case PopKind::spaceMarine:
 			return 0;
 		case PopKind::mechanicum:
-			return 0.0000002;
+			return quantity * 0.0000002;
 		case PopKind::human:
-			return 0.000002;
+			return quantity * 0.000002;
 		case PopKind::guards:
-			return 0.000001;
+			return quantity * 0.000001;
 		case PopKind::genestealer:
+			return location.getPopulation(PopKind::genestealer4) * 0.001;
+		case PopKind::genestealer2:
+			return location.getPopulation(PopKind::BroodBrohter) * 0.01;
+		case PopKind::genestealer3:
+			return location.getPopulation(PopKind::genestealer2) * 0.005;
+		case PopKind::genestealer4:
+			return location.getPopulation(PopKind::genestealer3) * 0.003;
+		case PopKind::BroodBrohter:
+			return location.getPopulation(PopKind::genestealer) * 0.1;
+		case AI::PopKind::END:
 			return 0;
 	}
 
 	return 0;
 }
 
-static void updatePopulation(const Map&, const Location&, Pop& pop)
+static void updatePopulation(const Map& map, Location& loc)
 {
-	pop.quantity += pop.quantity * growRate(pop.kind);
+	for (size_t i = 0; i < static_cast<size_t>(PopKind::END); i++)
+	{
+		PopKind kind = static_cast<PopKind>(i);
+		loc.addPopulation(kind, growRate(map, loc, kind));
+	}
 }
 
 static void updateLocation(const Map& map, Location& location)
 {
-	for (auto& pop : location)
-		updatePopulation(map, location, pop);
+	updatePopulation(map, location);
 }
 
 static void updateMonth(Map& map)

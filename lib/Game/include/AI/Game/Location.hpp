@@ -35,7 +35,7 @@ namespace AI
 	class Location
 	{
 		public:
-		constexpr static std::size_t MaxPop = 3;
+		constexpr static std::size_t MaxPop = 8;
 		using Container = Population<MaxPop>;
 		using iterator = typename Container::iterator;
 		using const_iterator = typename Container::const_iterator;
@@ -55,6 +55,7 @@ namespace AI
 		{
 		}
 
+		void addPopulation(PopKind kind, Pop::size_type quantity);
 		[[nodiscard]] const std::string& getName() const { return name; }
 		Container& getPopulation() { return population; }
 		[[nodiscard]] const Container& getPopulation() const { return population; }
@@ -68,6 +69,14 @@ namespace AI
 
 		void print(std::ostream& OS, size_t indents = 0) const;
 		void dump() const;
+
+		[[nodiscard]] Pop::size_type getPopulation(PopKind kind) const
+		{
+			for (const auto& p : population)
+				if (p.kind == kind)
+					return p.quantity;
+			return 0;
+		}
 
 		private:
 		LocationKey key;

@@ -1,1 +1,4 @@
-AIAddTest(Game src/CharacterLocationMatrixTest.cpp src/MapTest.cpp)
+AIAddTest(Game 
+	src/CharacterLocationMatrixTest.cpp 
+	src/MapTest.cpp
+	src/LocationTest.cpp)

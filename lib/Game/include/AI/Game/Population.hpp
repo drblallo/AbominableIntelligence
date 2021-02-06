@@ -18,8 +18,13 @@ namespace AI
 		human,
 		guards,
 		spaceMarine,
+		mechanicum,
+		BroodBrohter,
 		genestealer,
-		mechanicum
+		genestealer2,
+		genestealer3,
+		genestealer4,
+		END
 	};
 
 	struct Pop

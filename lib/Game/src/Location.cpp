@@ -21,9 +21,19 @@ static std::string kindToName(PopKind kind)
 		case PopKind::spaceMarine:
 			return "Space Marine";
 		case PopKind::genestealer:
-			return "Genestealer";
+			return "Pure genestealer";
+		case PopKind::genestealer2:
+			return "Second generation";
+		case PopKind::genestealer3:
+			return "Third generation";
+		case PopKind::genestealer4:
+			return "Fourth generation";
+		case PopKind::BroodBrohter:
+			return "Brood brothers";
 		case PopKind::mechanicum:
 			return "Mechanicum";
+		case PopKind::END:
+			return "ERROR";
 	}
 	assert(false and "unreachable");
 	return "ERROR";
@@ -44,3 +54,21 @@ void Location::print(ostream& OS, size_t indents) const
 		printPop(OS, indents + 1, pop);
 }
 void Location::dump() const { print(std::cout); }
+
+void Location::addPopulation(PopKind kind, Pop::size_type quantity)
+{
+	if (quantity == 0)
+		return;
+	auto* pos = find_if(
+			begin(), end(), [kind](const Pop& pop) { return pop.kind == kind; });
+	if (pos != end())
+	{
+		pos->quantity += quantity;
+		return;
+	}
+
+	if (population.size() == MaxPop)
+		return;
+
+	population.push_back(Pop{ kind, quantity });
+}

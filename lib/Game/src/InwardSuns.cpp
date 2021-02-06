@@ -44,11 +44,16 @@ Map AI::inwardSuns(std::seed_seq& seed)
 {
 	using C = CharacterKind;
 	Map map(seed);
-	const auto& location = map.getMapElement(map.addMapElement(kaneis()));
+	auto& location = map.getMapElement(map.addMapElement(kaneis()));
 	map.emplaceOwner<C::GangLord>(
 			location[0], "Ollander", Statblock{ 35, 35, 30, 40, 30, 30, 35, 15 });
 	map.emplace<C::GangLord>(
 			location[0], "Red Stick", Statblock{ 30, 30, 35, 25, 40, 35, 30, 5 });
+
+	map.emplace<C::GenestealerPatriarch>(
+			location[0], "Patriach", Statblock{ 40, 40, 40, 40, 40, 40, 20, 5 });
+
+	location[0].addPopulation(PopKind::genestealer, 3);
 
 	CharacterID Vincent = map.emplaceOwner<C::PlanetaryGovernor>(
 			location[1],
