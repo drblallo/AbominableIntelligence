@@ -27,6 +27,8 @@ namespace AI
 		END
 	};
 
+	std::string kindToName(PopKind kind);
+
 	struct Pop
 	{
 		using size_type = double;

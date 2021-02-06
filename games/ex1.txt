@@ -1,6 +1,2 @@
-pop 0 0 1
-pop 0 0 2
-pop 0 0 3
-pop 0 0 4
-pop 0 0 5
+pops 0 0
 skip 10

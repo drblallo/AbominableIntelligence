@@ -2,6 +2,7 @@
 
 #include "AI/Game/Activity.hpp"
 #include "AI/Game/Character.hpp"
+#include "AI/Game/Location.hpp"
 #include "AI/Game/Population.hpp"
 #include "AI/Utils/Indent.hpp"
 
@@ -14,16 +15,36 @@ void AI::getStat(
 	OS << id << ", " << map.getCharacter(id).getStats()[statNumber] << "\n";
 }
 
+static void getPopImpl(
+		const Map&, std::ostream& OS, const Location& loc, size_t popIndex)
+{
+	const auto& pop = loc.getPopulation()[popIndex];
+	OS << loc.getName() << "-" << kindToName(pop.kind) << ", " << pop.quantity
+		 << "\n";
+}
+
 void AI::getPop(
 		const Map& map,
 		std::ostream& OS,
 		size_t element,
 		size_t location,
-		int popIndex)
+		size_t popIndex)
 {
-	OS << element << "-" << location << "-" << popIndex << ", "
-		 << map.getLocation(element, location).getPopulation()[popIndex].quantity
-		 << "\n";
+	const auto& loc = map.getLocation(element, location);
+	if (loc.getPopulation().size() <= popIndex)
+	{
+		OS << "No population with index " << popIndex << " in " << loc.getName()
+			 << " only " << loc.getPopulation().size() << "\n";
+		return;
+	}
+	getPopImpl(map, OS, loc, popIndex);
+}
+void AI::getPops(
+		const Map& map, std::ostream& OS, size_t element, size_t location)
+{
+	const auto& loc = map.getLocation(element, location);
+	for (size_t i = 0; i < loc.getPopulation().size(); i++)
+		getPopImpl(map, OS, loc, i);
 }
 
 void AI::showCaracters(const Map& map, std::ostream& OS)

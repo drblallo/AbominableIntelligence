@@ -16,6 +16,7 @@ using namespace std;
 static constexpr CommandList list = makeCommandList(showCaracters, "chars")
 																				.add(AI::showLocations, "loc")
 																				.add(AI::getPop, "pop")
+																				.add(AI::getPops, "pops")
 																				.add(AI::showMapElements, "map")
 																				.add(AI::showCaracter, "char")
 																				.add(AI::nextDay, "day")
@@ -31,8 +32,8 @@ static constexpr CommandList list = makeCommandList(showCaracters, "chars")
 struct Args
 {
 	bool showPrompt{ true };
-	string command{ "" };
-	string inputFile{ "" };
+	string command;
+	string inputFile;
 };
 
 static Args parseArgs(int argc, char* argv[])

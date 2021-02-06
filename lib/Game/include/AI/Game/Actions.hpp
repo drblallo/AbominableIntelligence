@@ -21,5 +21,7 @@ namespace AI
 			std::ostream& OS,
 			size_t element,
 			size_t location,
-			int popIndex);
+			size_t popIndex);
+	void getPops(
+			const Map& map, std::ostream& OS, size_t element, size_t location);
 }	 // namespace AI

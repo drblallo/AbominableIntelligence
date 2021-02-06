@@ -10,7 +10,7 @@
 using namespace std;
 using namespace AI;
 
-static std::string kindToName(PopKind kind)
+std::string AI::kindToName(PopKind kind)
 {
 	switch (kind)
 	{
