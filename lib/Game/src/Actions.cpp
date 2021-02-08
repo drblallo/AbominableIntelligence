@@ -1,8 +1,11 @@
 #include "AI/Game/Actions.hpp"
 
+#include <ostream>
+
 #include "AI/Game/Activity.hpp"
 #include "AI/Game/Character.hpp"
 #include "AI/Game/Location.hpp"
+#include "AI/Game/Map.hpp"
 #include "AI/Game/Population.hpp"
 #include "AI/Utils/Indent.hpp"
 
@@ -12,7 +15,20 @@ using namespace std;
 void AI::getStat(
 		const Map& map, std::ostream& OS, CharacterID id, int statNumber)
 {
-	OS << id << ", " << map.getCharacter(id).getStats()[statNumber] << "\n";
+	if (statNumber >= Stat::requisition or statNumber < 0)
+	{
+		OS << "No stat with index " << statNumber << "\n";
+		return;
+	}
+	if (map.getCharacterCount() <= id)
+	{
+		OS << "No character with ID " << id << "\n";
+		return;
+	}
+	const auto& character = map.getCharacter(id);
+	OS << character.getName() << "-"
+		 << statToString(static_cast<Stat>(statNumber)) << ", "
+		 << character.getStats()[statNumber] << "\n";
 }
 
 static void getPopImpl(
@@ -23,6 +39,23 @@ static void getPopImpl(
 		 << "\n";
 }
 
+static const Location* safeGetLocation(
+		const Map& map, ostream& OS, size_t element, size_t location)
+{
+	if (map.mapElementsCount() <= element)
+	{
+		OS << "No map element with index " << element << "\n";
+		return nullptr;
+	}
+	const auto& mapElement = map.getMapElement(element);
+	if (mapElement.size() <= location)
+	{
+		OS << "No location with index " << element << "\n";
+		return nullptr;
+	}
+	return &mapElement[location];
+}
+
 void AI::getPop(
 		const Map& map,
 		std::ostream& OS,
@@ -30,21 +63,26 @@ void AI::getPop(
 		size_t location,
 		size_t popIndex)
 {
-	const auto& loc = map.getLocation(element, location);
-	if (loc.getPopulation().size() <= popIndex)
+	const auto* loc = safeGetLocation(map, OS, element, location);
+	if (loc == nullptr)
+		return;
+	if (loc->getPopulation().size() <= popIndex)
 	{
-		OS << "No population with index " << popIndex << " in " << loc.getName()
-			 << " only " << loc.getPopulation().size() << "\n";
+		OS << "No population with index " << popIndex << " in " << loc->getName()
+			 << " only " << loc->getPopulation().size() << "\n";
 		return;
 	}
-	getPopImpl(map, OS, loc, popIndex);
+	getPopImpl(map, OS, *loc, popIndex);
 }
 void AI::getPops(
 		const Map& map, std::ostream& OS, size_t element, size_t location)
 {
-	const auto& loc = map.getLocation(element, location);
-	for (size_t i = 0; i < loc.getPopulation().size(); i++)
-		getPopImpl(map, OS, loc, i);
+	const auto* loc = safeGetLocation(map, OS, element, location);
+	if (loc == nullptr)
+		return;
+
+	for (size_t i = 0; i < loc->getPopulation().size(); i++)
+		getPopImpl(map, OS, *loc, i);
 }
 
 void AI::showCaracters(const Map& map, std::ostream& OS)

@@ -72,6 +72,7 @@ namespace AI
 		fellowship,
 		requisition
 	};
+	std::string statToString(Stat s);
 
 	class Statblock
 	{

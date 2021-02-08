@@ -71,7 +71,7 @@ static string activityToString(Activity a)
 	return "ERROR";
 }
 
-static string statToString(Stat s)
+string AI::statToString(Stat s)
 {
 	switch (s)
 	{

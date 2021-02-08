@@ -13,21 +13,7 @@
 using namespace AI;
 using namespace std;
 
-static constexpr CommandList list = makeCommandList(showCaracters, "chars")
-																				.add(AI::showLocations, "loc")
-																				.add(AI::getPop, "pop")
-																				.add(AI::getPops, "pops")
-																				.add(AI::showMapElements, "map")
-																				.add(AI::showCaracter, "char")
-																				.add(AI::nextDay, "day")
-																				.add(AI::getStat, "stat")
-																				.add(AI::nextDay, "d")
-																				.add(AI::skipDays, "skip")
-																				.add(AI::nextDay, ":d")
-																				.add(AI::exit, "exit")
-																				.add(AI::exit, "q")
-																				.add(AI::exit, "quit")
-																				.add(AI::exit, ":q");
+#include "AI/Game/CommandList.inc"
 
 struct Args
 {
@@ -73,7 +59,7 @@ int main(int argc, char* argv[])
 	if (not args.command.empty())
 	{
 		istringstream s(args.command);
-		executeCommandStream(args.showPrompt, s, cout, list, map, cout);
+		executeCommandStream(args.showPrompt, s, cout, commandList, map, cout);
 		return 0;
 	}
 
@@ -81,10 +67,10 @@ int main(int argc, char* argv[])
 	{
 		fstream s;
 		s.open(args.inputFile, ios_base::in);
-		executeCommandStream(args.showPrompt, s, cout, list, map, cout);
+		executeCommandStream(args.showPrompt, s, cout, commandList, map, cout);
 		return 0;
 	}
 
-	executeCommandStream(args.showPrompt, cin, cout, list, map, cout);
+	executeCommandStream(args.showPrompt, cin, cout, commandList, map, cout);
 	return 0;
 }

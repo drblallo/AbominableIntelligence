@@ -15,16 +15,7 @@
 using namespace AI;
 using namespace std;
 
-static constexpr CommandList list = makeCommandList(showCaracters, "chars")
-																				.add(AI::showLocations, "loc")
-																				.add(AI::getPop, "pop")
-																				.add(AI::showMapElements, "map")
-																				.add(AI::showCaracter, "char")
-																				.add(AI::nextDay, "day")
-																				.add(AI::getStat, "stat")
-																				.add(AI::nextDay, "d")
-																				.add(AI::skipDays, "skip")
-																				.add(AI::nextDay, ":d");
+#include "AI/Game/CommandList.inc"
 
 pair<const char*, string> nextString(const char* start, const char* end)
 {
@@ -41,7 +32,7 @@ extern "C" int LLVMFuzzerTestOneInput(const uint8_t* Data, size_t Size)
 	seed_seq seq({ Data[0] });
 	auto inwardSun = inwardSuns(seq);
 	NullStream OS;
-	CommandPrompt prompt(list, inwardSun, OS);
+	CommandPrompt prompt(commandListNoQuit, inwardSun, OS);
 
 	const char* current = reinterpret_cast<const char*>(Data);
 	const char* end = reinterpret_cast<const char*>(Data + Size);

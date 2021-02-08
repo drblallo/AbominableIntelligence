@@ -1,0 +1,7 @@
+:dst *
+stat 1 7
+stat 2 7
+stat 3 7
+stat 4 !7
+stat 8 7
+

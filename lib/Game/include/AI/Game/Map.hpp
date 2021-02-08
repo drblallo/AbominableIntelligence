@@ -78,6 +78,8 @@ namespace AI
 			return characters[charID];
 		}
 
+		[[nodiscard]] size_t mapElementsCount() const { return mapGraph.size(); }
+
 		template<typename... Args>
 		CharacterID emplaceCharacter(LocationKey location, Args&&... args)
 		{
@@ -299,6 +301,8 @@ namespace AI
 		DiceType::value_type roll() const { return dice.roll(); }
 
 		Vox& getVox() { return vox; }
+
+		[[nodiscard]] size_t getCharacterCount() const { return characters.size(); }
 
 		private:
 		Graph<MapElement> mapGraph;
