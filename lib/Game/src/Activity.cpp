@@ -2,11 +2,31 @@
 
 #include "AI/Game/Character.hpp"
 #include "AI/Game/Map.hpp"
+#include "AI/Game/Population.hpp"
 
 using namespace std;
 using namespace AI;
 
 static constexpr Statblock::stat_type intelligenceToInfluenceDivisor = 20;
+
+string AI::activityToString(Activity a)
+{
+	switch (a)
+	{
+		case Activity::None:
+			return "None";
+		case Activity::ExtendInfluence:
+			return "Extend Influence";
+		case Activity::ReduceInfluence:
+			return "Reduce Influence";
+		case Activity::BidForOwership:
+			return "Bid For Owership";
+		case Activity::Infect:
+			return "Infect";
+	}
+	assert(false and "Unrechable");
+	return "ERROR";
+}
 
 template<>
 void AI::resolveActivity<Activity::ExtendInfluence>(Map&, Character& character)
@@ -61,4 +81,13 @@ void AI::resolveActivity<Activity::BidForOwership>(
 		comparedTo->set<requisition>(comparedTo->get<requisition>() / 4);
 		map.setOwnership(character, map.getLocationOf(character));
 	}
+}
+
+template<>
+void AI::resolveActivity<Activity::Infect>(Map& map, Character& character)
+{
+	auto& location = map.getLocationOf(character);
+
+	double ovopositorStelaers = location.getPopulation(PopKind::genestealer) + 1;
+	location.addPopulation(PopKind::BroodBrohter, ovopositorStelaers);
 }

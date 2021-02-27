@@ -54,23 +54,6 @@ string_view AI::kindToName(CharacterKind k)
 
 void Statblock::dump() const { print(cout); }
 
-static string activityToString(Activity a)
-{
-	switch (a)
-	{
-		case Activity::None:
-			return "None";
-		case Activity::ExtendInfluence:
-			return "Extend Influence";
-		case Activity::ReduceInfluence:
-			return "Reduce Influence";
-		case Activity::BidForOwership:
-			return "Bid For Owership";
-	}
-	assert(false and "Unrechable");
-	return "ERROR";
-}
-
 string AI::statToString(Stat s)
 {
 	switch (s)

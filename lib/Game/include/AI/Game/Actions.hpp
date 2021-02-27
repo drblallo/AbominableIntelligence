@@ -16,6 +16,7 @@ namespace AI
 	void exit(const Map& map, std::ostream& OS);
 	void nextDay(Map& map, std::ostream& OS);
 	void skipDays(Map& map, std::ostream& OS, int ticks);
+	void infect(Map& map, std::ostream& OS, CharacterID characterID);
 	void getPop(
 			const Map& map,
 			std::ostream& OS,

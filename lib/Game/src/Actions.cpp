@@ -15,7 +15,7 @@ using namespace std;
 void AI::getStat(
 		const Map& map, std::ostream& OS, CharacterID id, int statNumber)
 {
-	if (statNumber >= Stat::requisition or statNumber < 0)
+	if (statNumber > Stat::requisition or statNumber < 0)
 	{
 		OS << "No stat with index " << statNumber << "\n";
 		return;
@@ -163,11 +163,17 @@ static void updateActivity(Map& map, Character& character)
 		case Activity::ReduceInfluence:
 			resolveActivity<Activity::ReduceInfluence>(map, character);
 			return;
+		case Activity::Infect:
+			resolveActivity<Activity::Infect>(map, character);
+			return;
 	}
 }
 
 static void updateChar(Map& map, Character& character)
 {
+	if (character.isA(CharacterKind::GenestealerPatriarch))
+		return;
+
 	if (character.get<requisition>() >
 					maxRequisition(character.getKind()) - 0.1 or
 			character.get<fellowship>() >= character.get<intelligence>())
@@ -196,15 +202,15 @@ static double growRate(const Map&, const Location& location, PopKind pop)
 		case PopKind::guards:
 			return quantity * 0.000001;
 		case PopKind::genestealer:
-			return location.getPopulation(PopKind::genestealer4) * 0.001;
+			return location.getPopulation(PopKind::genestealer4) * 0.0001;
 		case PopKind::genestealer2:
-			return location.getPopulation(PopKind::BroodBrohter) * 0.01;
+			return location.getPopulation(PopKind::BroodBrohter) * 0.001;
 		case PopKind::genestealer3:
-			return location.getPopulation(PopKind::genestealer2) * 0.005;
+			return location.getPopulation(PopKind::genestealer2) * 0.0005;
 		case PopKind::genestealer4:
-			return location.getPopulation(PopKind::genestealer3) * 0.003;
+			return location.getPopulation(PopKind::genestealer3) * 0.0003;
 		case PopKind::BroodBrohter:
-			return location.getPopulation(PopKind::genestealer) * 0.1;
+			return 0;
 		case AI::PopKind::END:
 			return 0;
 	}
@@ -250,4 +256,23 @@ void AI::skipDays(Map& map, std::ostream& OS, int ticks)
 {
 	for (int i = 0; i < ticks; i++)
 		nextDay(map, OS);
+}
+
+void AI::infect(Map& map, std::ostream& OS, CharacterID characterID)
+{
+	if (characterID < 0 or characterID >= map.getCharacterCount())
+	{
+		OS << "No character with id " << characterID << "\n";
+		return;
+	}
+
+	auto& character = map.getCharacter(characterID);
+
+	if (not character.isA(CharacterKind::GenestealerPatriarch))
+	{
+		OS << "Character with ID " << characterID << " is not a patriarch\n";
+		return;
+	}
+
+	character.setActivity(Activity::Infect);
 }

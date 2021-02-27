@@ -4,6 +4,7 @@ namespace AI
 {
 
 static constexpr CommandList commandListNoQuit = makeCommandList(showCaracters, "chars")
+																				.add(AI::infect, "inf")
 																				.add(AI::showLocations, "loc")
 																				.add(AI::getPop, "pop")
 																				.add(AI::getPops, "pops")

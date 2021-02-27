@@ -1,5 +1,7 @@
 #pragma once
 
+#include <string>
+
 namespace AI
 {
 	enum class Activity
@@ -7,7 +9,8 @@ namespace AI
 		None,
 		ExtendInfluence,
 		ReduceInfluence,
-		BidForOwership
+		BidForOwership,
+		Infect
 	};
 
 	class Map;
@@ -15,5 +18,6 @@ namespace AI
 
 	template<Activity activity>
 	void resolveActivity(Map& map, Character& character);
+	std::string activityToString(Activity a);
 
 }	 // namespace AI
