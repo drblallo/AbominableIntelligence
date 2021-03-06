@@ -3,4 +3,4 @@ inputfile=$1
 shift
 quantity=$1
 shift
-cat $inputfile | python scripts/repeat.py $quantity |  build/tool/aishell/aishell --no-prompt | python scripts/graphs.py --exclude "$@"
+cat $inputfile | python scripts/repeat.py $quantity |  build/tool/aishell/aishell --no-prompt | python python/graphs.py --exclude "$@"
