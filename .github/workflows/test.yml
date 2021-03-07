@@ -12,12 +12,16 @@ jobs:
     - uses: actions/setup-python@v1
       with:
         python-version: 3.8
+    - name: fetch llvm key
+      run:  wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add
+    - name: add apt repo
+      run: sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main' 
+    - name: install clang llvm
+      run: sudo apt install clang-11 
     - name: Install python requirements 
       run: pip3 install -r requirements.txt 
     - name: collect-dependencies
       run: git submodule update --recursive --init 
-    - name: get clang 
-      run: sudo apt install clang-11
     - name: build cpp
       run: mkdir build && cd build && cmake ../ -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang && make -j4 && make test
     - name: test python
