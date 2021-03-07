@@ -19,6 +19,6 @@ jobs:
     - name: get clang 
       run: sudo apt install clang 
     - name: build cpp
-      run: mkdir build && cd build && cmake ../ && make -j4 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang && make test
+      run: mkdir build && cd build && cmake ../ -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang && make -j4 && make test
     - name: test python
       run: cd python && pytest ./test
