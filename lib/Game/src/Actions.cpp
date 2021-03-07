@@ -56,6 +56,29 @@ static const Location* safeGetLocation(
 	return &mapElement[location];
 }
 
+static Character* safeGetCharacter(
+		Map& map, ostream& OS, CharacterID characterID)
+{
+	if (map.charactersSize() <= characterID)
+	{
+		OS << "No character with ID " << characterID << "\n";
+		return nullptr;
+	}
+	return &map.getCharacter(characterID);
+}
+
+static Character* safeGetPatriarch(
+		Map& map, ostream& OS, CharacterID characterID)
+{
+	auto* res = safeGetCharacter(map, OS, characterID);
+	if (res and not res->isA(CharacterKind::GenestealerPatriarch))
+	{
+		OS << "Character with ID " << characterID << " is not a patriarch\n";
+		return nullptr;
+	}
+	return res;
+}
+
 void AI::getPop(
 		const Map& map,
 		std::ostream& OS,
@@ -166,6 +189,9 @@ static void updateActivity(Map& map, Character& character)
 		case Activity::Infect:
 			resolveActivity<Activity::Infect>(map, character);
 			return;
+		case Activity::Attack:
+			resolveActivity<Activity::Attack>(map, character);
+			return;
 	}
 }
 
@@ -258,21 +284,19 @@ void AI::skipDays(Map& map, std::ostream& OS, int ticks)
 		nextDay(map, OS);
 }
 
+static void patriarchMaybeSetAction(
+		Map& map, std::ostream& OS, CharacterID characterID, Activity activity)
+{
+	if (auto* patriarch = safeGetPatriarch(map, OS, characterID); patriarch)
+		patriarch->setActivity(activity);
+}
+
 void AI::infect(Map& map, std::ostream& OS, CharacterID characterID)
 {
-	if (characterID < 0 or characterID >= map.getCharacterCount())
-	{
-		OS << "No character with id " << characterID << "\n";
-		return;
-	}
+	patriarchMaybeSetAction(map, OS, characterID, Activity::Infect);
+}
 
-	auto& character = map.getCharacter(characterID);
-
-	if (not character.isA(CharacterKind::GenestealerPatriarch))
-	{
-		OS << "Character with ID " << characterID << " is not a patriarch\n";
-		return;
-	}
-
-	character.setActivity(Activity::Infect);
+void AI::attack(Map& map, std::ostream& OS, CharacterID characterID)
+{
+	patriarchMaybeSetAction(map, OS, characterID, Activity::Attack);
 }

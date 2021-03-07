@@ -10,6 +10,7 @@ namespace AI
 		ExtendInfluence,
 		ReduceInfluence,
 		BidForOwership,
+		Attack,
 		Infect
 	};
 

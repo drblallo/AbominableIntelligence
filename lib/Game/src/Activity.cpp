@@ -23,6 +23,8 @@ string AI::activityToString(Activity a)
 			return "Bid For Owership";
 		case Activity::Infect:
 			return "Infect";
+		case Activity::Attack:
+			return "Attack";
 	}
 	assert(false and "Unrechable");
 	return "ERROR";
@@ -89,5 +91,17 @@ void AI::resolveActivity<Activity::Infect>(Map& map, Character& character)
 	auto& location = map.getLocationOf(character);
 
 	double ovopositorStelaers = location.getPopulation(PopKind::genestealer) + 1;
+	ovopositorStelaers =
+			min(ovopositorStelaers, location.getPopulation(PopKind::human));
 	location.addPopulation(PopKind::BroodBrohter, ovopositorStelaers);
+	location.addPopulation(PopKind::human, -ovopositorStelaers);
+}
+
+template<>
+void AI::resolveActivity<Activity::Attack>(Map& map, Character& character)
+{
+	auto& location = map.getLocationOf(character);
+	assert(character.isA(CharacterKind::GenestealerPatriarch));
+	auto quantity = location.getPopulation(PopKind::genestealer);
+	location.addPopulation(PopKind::human, -quantity);
 }

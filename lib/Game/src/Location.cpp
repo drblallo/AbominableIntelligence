@@ -63,7 +63,7 @@ void Location::addPopulation(PopKind kind, Pop::size_type quantity)
 			begin(), end(), [kind](const Pop& pop) { return pop.kind == kind; });
 	if (pos != end())
 	{
-		pos->quantity += quantity;
+		pos->quantity = max(0.0, quantity + pos->quantity);
 		return;
 	}
 
