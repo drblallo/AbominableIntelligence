@@ -16,8 +16,8 @@ jobs:
       run:  wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key|sudo apt-key add
     - name: add apt repo
       run: sudo add-apt-repository 'deb http://apt.llvm.org/focal/ llvm-toolchain-focal-11 main' 
-    - name: install clang llvm
-      run: sudo apt install clang-11 
+    - name: install clang 
+      run: sudo apt install libclang-cpp11 clang-11 libllvm11 libclang-common-11-dev libclang1-11 llvm-11-dev 
     - name: Install python requirements 
       run: pip3 install -r requirements.txt 
     - name: collect-dependencies
