@@ -23,6 +23,6 @@ jobs:
     - name: collect-dependencies
       run: git submodule update --recursive --init 
     - name: build cpp
-      run: mkdir build && cd build && cmake ../ -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang && make -j4 && make test
+      run: mkdir build && cd build && cmake ../ -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang -DBUILD_SHARED_LIBS=1 && make -j4 && make test
     - name: test python
       run: cd python && pytest ./test
