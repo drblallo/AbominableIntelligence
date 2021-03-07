@@ -16,7 +16,9 @@ jobs:
       run: pip3 install -r requirements.txt 
     - name: collect-dependencies
       run: git submodule update --recursive --init 
+    - name: get clang 
+      run: apt install clang 
     - name: build cpp
-      run: mkdir build && cd build && cmake ../ && make -j4 && make test
+      run: mkdir build && cd build && cmake ../ && make -j4 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang && make test
     - name: test python
       run: cd python && pytest ./test
