@@ -17,7 +17,7 @@ jobs:
     - name: collect-dependencies
       run: git submodule update --recursive --init 
     - name: get clang 
-      run: apt install clang 
+      run: sudo apt install clang 
     - name: build cpp
       run: mkdir build && cd build && cmake ../ && make -j4 -DCMAKE_CXX_COMPILER=clang++ -DCMAKE_C_COMPILER=clang && make test
     - name: test python
